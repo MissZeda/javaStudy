@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.securityclass.mapper.UserMapper">
+    <select id="loadUserByUsername" resultType="com.example.securityclass.entity.SysUser">
+        select *
+        from sys_user
+        where user_name = #{username}
+    </select>
+
+
+    <select id="queryAuthoritiesByUserId" resultType="java.lang.String">
+        select perm_key
+        from sys_menu
+        where id in (select DISTINCT menu_id
+                     from sys_role_menu
+                     where role_id in
+                           (select sys_user_role.role_id
+                            from sys_user_role
+                                     inner join sys_user on sys_user_role.user_id = sys_user.id
+                                     inner join sys_role on sys_user.id = sys_user_role.user_id
+                            where sys_user.id = #{id}
+                              and sys_menu.status = 0
+                              and sys_role.`status` = 0));
+    </select>
+
+    <resultMap id="userRoles" type="com.example.securityclass.vo.UserVO">
+        <association property="sysUser">
+            <id property="id" column="id"/>
+            <result property="userName" column="user_name"/>
+            <result property="nickName" column="nick_name"/>
+            <result property="password" column="password"/>
+            <result property="userType" column="user_type"/>
+            <result property="status" column="status"/>
+            <result property="createTime" column="create_time"/>
+            <result property="email" column="email"/>
+            <result property="phonenumber" column="phonenumber"/>
+            <result property="sex" column="sex"/>
+            <result property="avatar" column="avatar"/>
+            <result property="delFlag" column="del_flag"/>
+        </association>
+        <association property="roleVO">
+            <association property="role">
+                <id column="id" property="id"></id>
+                <result column="role_key" property="roleKey"></result>
+                <result column="name" property="name"></result>
+                <result column="status" property="status"></result>
+                <result column="del_flag" property="delFlag"></result>
+                <result column="remark" property="remark"></result>
+            </association>
+            <association property="menuList">
+                <id column="id" property="id"></id>
+                <result column="menu_name" property="menuName"></result>
+                <result column="path" property="path"></result>
+                <result column="status" property="status"></result>
+                <result column="permKey" property="permKey"></result>
+                <result column="del_Flag" property="delFlag"></result>
+                <result column="remark" property="remark"></result>
+            </association>
+        </association>
+
+    </resultMap>
+    <select id="queryUserRolesByUserId" resultMap="userRoles">
+        select sys_user.*,
+               sys_role.*,
+               sys_menu.*
+        from sys_user
+                 left join sys_user_role on sys_user.id = sys_user_role.user_id
+                 left join sys_role on sys_role.id = sys_user_role.role_id
+                 left join sys_role_menu on sys_user_role.role_id = sys_role_menu.role_id
+                 left join sys_menu on sys_role_menu.menu_id = sys_menu.id
+        where sys_user.id = #{id}
+    </select>
+</mapper>

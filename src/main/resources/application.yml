@@ -1,0 +1,26 @@
+#端口号配置
+server:
+  port: 8088
+#ioc相关配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: iot
+    password: iot
+    url: jdbc:mysql://81.68.67.66/managerment?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+
+#mybatis 相关配置
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.example.securityclass.entity
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    org.mybatis: DEBUG
+#分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
