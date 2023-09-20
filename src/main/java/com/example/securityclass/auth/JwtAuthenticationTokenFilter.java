@@ -19,6 +19,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         if (token != null) {
             JwtUtils.tokenVerify(token);
         }
+        // 放行
         filterChain.doFilter(request, response);
     }
 }
