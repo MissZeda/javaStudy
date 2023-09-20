@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 登录成功处理器
+ */
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
@@ -24,5 +27,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         Map<String, Object> tokenInfo = new HashMap<>();
         tokenInfo.put("token", token);
         response.getWriter().write(JSON.toJSONString(tokenInfo));
+
+
     }
 }
