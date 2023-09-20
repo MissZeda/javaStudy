@@ -18,4 +18,9 @@ public class AdminController {
     public String test(String username) {
         return "hello，admin,test";
     }
+
+    @GetMapping("/device")
+    public String device() {
+        return "hello，admin,device";
+    }
 }

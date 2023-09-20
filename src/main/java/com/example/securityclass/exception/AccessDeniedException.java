@@ -10,6 +10,7 @@ import java.io.IOException;
 public class AccessDeniedException implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, org.springframework.security.access.AccessDeniedException accessDeniedException) throws IOException, ServletException {
+        accessDeniedException.printStackTrace();
         response.setContentType("text/html;charset=UTF-8");
         response.getWriter().write("异常:" + accessDeniedException.getMessage());
     }

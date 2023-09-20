@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.securityclass.mapper.UserMapper">
+    <insert id="register">
+        insert into sys_user (user_name, password, status)
+        values (#{userName}, #{password}, #{status})
+    </insert>
     <select id="loadUserByUsername" resultType="com.example.securityclass.entity.SysUser">
         select *
         from sys_user
@@ -69,5 +73,10 @@
                  left join sys_role_menu on sys_user_role.role_id = sys_role_menu.role_id
                  left join sys_menu on sys_role_menu.menu_id = sys_menu.id
         where sys_user.id = #{id}
+    </select>
+    <select id="queryPermissionByUrl" resultType="java.lang.String">
+        select perm_key
+        from sys_menu
+        where path = #{url};
     </select>
 </mapper>

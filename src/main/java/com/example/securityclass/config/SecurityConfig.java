@@ -6,32 +6,39 @@ import com.example.securityclass.auth.LoginFilter;
 import com.example.securityclass.exception.AccessDeniedException;
 import com.example.securityclass.security.LoginFailureHandler;
 import com.example.securityclass.security.LoginSuccessHandler;
+import com.example.securityclass.security.MyAuthorizationManager;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+
 public class SecurityConfig {
 
+    @Resource
+    private MyAuthorizationManager authorizationManager;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizationHttpRequests -> {
             authorizationHttpRequests
-                    .requestMatchers("/admin/api/**").hasAnyAuthority("sys:device:delete", "sys:device:list", "sys:device:search")
-                    .requestMatchers("/user/api/**").hasAnyAuthority("sys:device:list", "sys:device:delete", "sys:device:search")
                     .requestMatchers("/app/api/**").permitAll()
                     .requestMatchers("/login").permitAll()
-                    .anyRequest().authenticated();
+                    //.requestMatchers("/app/api/register").permitAll()
+                    .anyRequest().access(authorizationManager);
         });
 
         // 没有设置自定义时候的表单登录，好处就是方便配置
@@ -81,9 +88,11 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(admin, user);
     }*/
 
+    // 配置密码编码器，这里使用的是BCryptPasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //明文加密
-        return NoOpPasswordEncoder.getInstance();
+        DelegatingPasswordEncoder delegatingPasswordEncoder = (DelegatingPasswordEncoder) PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        delegatingPasswordEncoder.setDefaultPasswordEncoderForMatches(new BCryptPasswordEncoder());
+        return delegatingPasswordEncoder;
     }
 }

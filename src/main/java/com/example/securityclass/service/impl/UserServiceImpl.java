@@ -9,9 +9,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -29,6 +34,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserVO> queryUserRolesByUserId(int id) {
         return userMapper.queryUserRolesByUserId(id);
+    }
+
+    @Override
+    public boolean register(String username, String password) {
+        String encodingID = "bcrypt";
+        Map<String, PasswordEncoder> passwordEncoderMap = new HashMap<>();
+        passwordEncoderMap.put(encodingID, new BCryptPasswordEncoder());
+        PasswordEncoder passwordEncoder = new DelegatingPasswordEncoder(encodingID, passwordEncoderMap);
+        SysUser sysUser = new SysUser();
+        sysUser.setUserName(username);
+        sysUser.setPassword(passwordEncoder.encode(password));
+        sysUser.setStatus(0);
+        return userMapper.register(sysUser);
+    }
+
+    @Override
+    public List<String> queryPermissionByUrl(String requestURI) {
+        List<String> permission = userMapper.queryPermissionByUrl(requestURI);
+        return permission;
     }
 
     // 登录

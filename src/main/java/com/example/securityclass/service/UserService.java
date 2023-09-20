@@ -9,4 +9,8 @@ public interface UserService extends UserDetailsService {
     List<String> queryAuthoritiesByUserId(int id);
 
     List<UserVO> queryUserRolesByUserId(int id);
+
+    boolean register(String username, String password);
+
+    List<String> queryPermissionByUrl(String requestURI);
 }

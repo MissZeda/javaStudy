@@ -54,7 +54,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         if ((line = reader.readLine()) != null) {
             // 将读取到的字符串添加进sb
             stringBuilder.append(line);
-            System.out.println("stringBuilder = " + stringBuilder);
         }
         // 字符串转换
         SysUser sysUser = JSON.parseObject(stringBuilder.toString(), SysUser.class);

@@ -1,6 +1,8 @@
 package com.example.securityclass.controller;
 
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.example.securityclass.entity.AxiosResult;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.vo.UserVO;
@@ -10,10 +12,7 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -45,10 +44,15 @@ public class AppController {
         out.flush();
     }
 
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello，everyone!";
+    @PostMapping("/register")
+    public AxiosResult<Map<String, Object>> register(@RequestBody String userInfo) {
+        JSONObject jsonObject = JSON.parseObject(userInfo);
+        String username = jsonObject.getString("userName");
+        String password = jsonObject.getString("password");
+        if (userService.register(username, password)) {
+            return new AxiosResult<>(200, null, "注册成功");
+        }
+        return new AxiosResult<>(200, null, "注册失败");
     }
 
     @GetMapping("/queryAuthoritiesByUserId/{id}")
@@ -66,4 +70,11 @@ public class AppController {
         map.put("roles", roles);
         return new AxiosResult<>(200, map, "查询成功");
     }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
+    }
+
+
 }
