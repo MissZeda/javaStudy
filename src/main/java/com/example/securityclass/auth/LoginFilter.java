@@ -33,14 +33,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         if (!request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
-
         // 获得通过request的字符流读取获得用户
         SysUser sysUser = obtainUser(request);
-
         // 给需要认证的用户填入信息，把pwd和username放进去
         UsernamePasswordAuthenticationToken authRequest = UsernamePasswordAuthenticationToken.unauthenticated(sysUser.getUserName(),
                 sysUser.getPassword());
-        // Allow subclasses to set the "details" property
+
         setDetails(request, authRequest);
         // 进行下一步认证管理
         return this.getAuthenticationManager().authenticate(authRequest);
@@ -54,8 +52,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         BufferedReader reader = request.getReader();
         StringBuilder stringBuilder = new StringBuilder();
         if ((line = reader.readLine()) != null) {
-            // 字符串添加
+            // 将读取到的字符串添加进sb
             stringBuilder.append(line);
+            System.out.println("stringBuilder = " + stringBuilder);
         }
         // 字符串转换
         SysUser sysUser = JSON.parseObject(stringBuilder.toString(), SysUser.class);
