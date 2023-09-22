@@ -51,8 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<String> queryPermissionByUrl(String requestURI) {
-        List<String> permission = userMapper.queryPermissionByUrl(requestURI);
-        return permission;
+        return userMapper.queryPermissionByUrl(requestURI);
     }
 
     // 登录

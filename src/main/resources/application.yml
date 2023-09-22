@@ -1,6 +1,7 @@
 #端口号配置
 server:
   port: 8088
+
 #ioc相关配置
 spring:
   datasource:
@@ -8,7 +9,11 @@ spring:
     username: iot
     password: iot
     url: jdbc:mysql://81.68.67.66/managerment?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-
+  data: # 连接空闲超过N(s秒、ms毫秒)后关闭，0为禁用，这里配置值和tcp-keepalive值一致
+    redis:
+      database: 0 # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
+      host: 81.68.67.66
+      port: 9801
 #mybatis 相关配置
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml

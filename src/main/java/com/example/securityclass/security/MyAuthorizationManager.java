@@ -52,10 +52,11 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
         // 获取到当前用户所具备的权限
         Collection<? extends GrantedAuthority> collect = authentication.get().getAuthorities();
         List<String> authorities = collect.stream().map((Function<GrantedAuthority, String>) GrantedAuthority::getAuthority).toList();
+        System.out.println("authorities = " + authorities);
         // 获取用户请求该路径的权限
         List<String> permissionByUrl = userService.queryPermissionByUrl(requestURI);
         // 没有根据url查询出匹配的权限或者用户的权限不包含在里面，则拒绝访问
-        if (permissionByUrl.isEmpty() || permissionByUrl.size() == 0 || authorities.containsAll(permissionByUrl)) {
+        if (permissionByUrl.isEmpty() || permissionByUrl.size() == 0 || !authorities.containsAll(permissionByUrl)) {
             throw new AccessDeniedException("权限不足");
         }
         return new AuthorizationDecision(isGranted);

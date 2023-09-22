@@ -19,5 +19,9 @@ public class UserController {
         return "hello，user";
     }
 
+    @GetMapping("/list")
+    public String list() {
+        return "hello，user,list";
+    }
 
 }

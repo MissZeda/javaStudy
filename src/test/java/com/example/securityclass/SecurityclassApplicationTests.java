@@ -6,7 +6,10 @@ import com.example.securityclass.service.UserService;
 import com.example.securityclass.vo.UserVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.List;
 
@@ -31,5 +34,15 @@ class SecurityclassApplicationTests {
     void testUser() {
         List<UserVO> userVOS = userService.queryUserRolesByUserId(1);
         System.out.println("userVOS = " + userVOS);
+    }
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Test
+    void redisTest() {
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        String test = (String) valueOperations.get("user");
+        System.out.println("test = " + test);
     }
 }
