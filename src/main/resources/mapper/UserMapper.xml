@@ -79,4 +79,8 @@
         from sys_menu
         where path = #{url};
     </select>
+    <select id="queryAllUser" resultType="com.example.securityclass.entity.SysUser">
+        select *
+        from sys_user
+    </select>
 </mapper>

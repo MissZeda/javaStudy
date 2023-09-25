@@ -1,5 +1,6 @@
 package com.example.securityclass.service;
 
+import com.example.securityclass.entity.SysUser;
 import com.example.securityclass.vo.UserVO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -13,4 +14,6 @@ public interface UserService extends UserDetailsService {
     boolean register(String username, String password);
 
     List<String> queryPermissionByUrl(String requestURI);
+
+    List<SysUser> queryAllUser();
 }

@@ -20,4 +20,7 @@ public interface UserMapper {
     boolean register(SysUser sysUser);
 
     List<String> queryPermissionByUrl(@Param("url") String requestURI);
+
+    List<SysUser> queryAllUser();
+
 }

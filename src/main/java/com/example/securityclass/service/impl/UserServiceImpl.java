@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.queryPermissionByUrl(requestURI);
     }
 
+    @Override
+    public List<SysUser> queryAllUser() {
+        return userMapper.queryAllUser();
+    }
+
     // 登录
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

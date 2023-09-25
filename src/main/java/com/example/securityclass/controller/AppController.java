@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.example.securityclass.entity.AxiosResult;
 import com.example.securityclass.entity.Device;
+import com.example.securityclass.entity.SysUser;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.task.AsyncTask;
 import com.example.securityclass.vo.UserVO;
@@ -89,22 +90,30 @@ public class AppController {
     }
 
 
+    @SneakyThrows
     @RequestMapping("send")
     public AxiosResult<String> sendMail03() {
         MimeMessage mMessage = javaMailSender.createMimeMessage();//创建邮件对象
         MimeMessageHelper mMessageHelper;
+        List<SysUser> sysUsers = userService.queryAllUser();
         Properties prop = new Properties();
-        try {
-            mMessageHelper = new MimeMessageHelper(mMessage, true);
-            mMessageHelper.setFrom("2389202940@qq.com");//发件人邮箱
-            mMessageHelper.setTo("1284801088@qq.com");//收件人邮箱
-            mMessageHelper.setSubject("springboot-email-test");//邮件的主题
-            mMessageHelper.setText("这是一封测试邮件----------");
+        mMessageHelper = new MimeMessageHelper(mMessage, true);
+        mMessageHelper.setFrom("2389202940@qq.com");//发件人邮箱
+        sysUsers.forEach(u -> {
+            String email = u.getEmail();
+            if (email == null) {
+                return;
+            }
+            try {
+                mMessageHelper.setTo(email);//收件人邮箱
+                mMessageHelper.setSubject("会员卡即将到期提醒");//邮件的主题
+                mMessageHelper.setText("会员卡即将到期提醒----------");
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
             javaMailSender.send(mMessage);//发送邮件
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return new AxiosResult<>(0, "邮件发送失败", null);
-        }
+        });
+
         return new AxiosResult<>(0, "邮件发送成功", null);
     }
 
