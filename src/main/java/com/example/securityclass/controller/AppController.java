@@ -4,14 +4,21 @@ package com.example.securityclass.controller;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.example.securityclass.entity.AxiosResult;
+import com.example.securityclass.entity.Device;
 import com.example.securityclass.service.UserService;
+import com.example.securityclass.task.AsyncTask;
 import com.example.securityclass.vo.UserVO;
 import com.google.code.kaptcha.Producer;
 import jakarta.annotation.Resource;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -19,6 +26,10 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/app/api")
@@ -29,6 +40,12 @@ public class AppController {
 
     @Resource
     private Producer producer;
+
+    @Value("${spring.mail.username}")
+    private String sendName;
+
+    @Resource
+    private JavaMailSender javaMailSender;
 
     @SneakyThrows
     @GetMapping("/captcha.jpg")
@@ -70,6 +87,62 @@ public class AppController {
         map.put("roles", roles);
         return new AxiosResult<>(200, map, "查询成功");
     }
+
+
+    @RequestMapping("send")
+    public AxiosResult<String> sendMail03() {
+        MimeMessage mMessage = javaMailSender.createMimeMessage();//创建邮件对象
+        MimeMessageHelper mMessageHelper;
+        Properties prop = new Properties();
+        try {
+            mMessageHelper = new MimeMessageHelper(mMessage, true);
+            mMessageHelper.setFrom("2389202940@qq.com");//发件人邮箱
+            mMessageHelper.setTo("1284801088@qq.com");//收件人邮箱
+            mMessageHelper.setSubject("springboot-email-test");//邮件的主题
+            mMessageHelper.setText("这是一封测试邮件----------");
+            javaMailSender.send(mMessage);//发送邮件
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return new AxiosResult<>(0, "邮件发送失败", null);
+        }
+        return new AxiosResult<>(0, "邮件发送成功", null);
+    }
+
+    @Resource
+    private AsyncTask asyncTask;
+
+    @RequestMapping("/asyncfuture")
+    public AxiosResult<String> asyncfuture() throws InterruptedException {
+        long begin = System.currentTimeMillis();
+        Future<String> task4 = asyncTask.task4();
+        Future<String> task5 = asyncTask.task5();
+        Future<String> task6 = asyncTask.task6();
+        for (; ; ) {
+            if (task4.isDone() && task5.isDone() && task6.isDone()) {
+                break;
+            }
+        }
+        long end = System.currentTimeMillis();
+        long total = end - begin;
+        System.out.println("总的执行时间=" + total);
+        return new AxiosResult<>(0, "总的执行时间=" + total, null);
+    }
+
+    @RequestMapping("/futureDevice")
+    public AxiosResult<List<Device>> futureDevice() throws InterruptedException, ExecutionException {
+        long begin = System.currentTimeMillis();
+        CompletableFuture<AxiosResult<List<Device>>> task7 = asyncTask.task7();
+        for (; ; ) {
+            if (task7.isDone()) {
+                break;
+            }
+        }
+        long end = System.currentTimeMillis();
+        long total = end - begin;
+        System.out.println("总的执行时间=" + total);
+        return task7.get();
+    }
+
 
     @GetMapping("/hello")
     public String hello() {

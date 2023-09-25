@@ -51,7 +51,6 @@ public class SecurityConfig {
 
         //在登录之前获取token并校验
         http.addFilterBefore(new JwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
         // 使用自定义登录过滤器来替换
         http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling(e -> e.accessDeniedHandler(new AccessDeniedException()));
@@ -77,8 +76,6 @@ public class SecurityConfig {
         // 验证码处理
         return loginFilter;
     }
-
-
 
 
     /*@Bean
