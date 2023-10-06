@@ -77,14 +77,6 @@ public class SecurityConfig {
         return loginFilter;
     }
 
-
-    /*@Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager(){
-        UserDetails admin = User.withUsername("admin").password("123").authorities("admin:api", "user:api").build();
-        UserDetails user = User.withUsername("user").password("123").authorities("user:api").build();
-        return new InMemoryUserDetailsManager(admin, user);
-    }*/
-
     // 配置密码编码器，这里使用的是BCryptPasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -12,6 +12,7 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -56,7 +57,7 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
         // 获取用户请求该路径的权限
         List<String> permissionByUrl = userService.queryPermissionByUrl(requestURI);
         // 没有根据url查询出匹配的权限或者用户的权限不包含在里面，则拒绝访问
-        if (permissionByUrl.isEmpty() || permissionByUrl.size() == 0 || !authorities.containsAll(permissionByUrl)) {
+        if (permissionByUrl.isEmpty() || permissionByUrl.size() == 0 || !new HashSet<>(authorities).containsAll(permissionByUrl)) {
             throw new AccessDeniedException("权限不足");
         }
         return new AuthorizationDecision(isGranted);

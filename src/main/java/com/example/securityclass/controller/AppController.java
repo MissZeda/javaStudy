@@ -3,23 +3,20 @@ package com.example.securityclass.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.example.securityclass.config.ScheduleConfig;
 import com.example.securityclass.entity.AxiosResult;
 import com.example.securityclass.entity.Device;
-import com.example.securityclass.entity.SysUser;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.task.AsyncTask;
 import com.example.securityclass.vo.UserVO;
 import com.google.code.kaptcha.Producer;
 import jakarta.annotation.Resource;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -27,7 +24,6 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -93,27 +89,7 @@ public class AppController {
     @SneakyThrows
     @RequestMapping("send")
     public AxiosResult<String> sendMail03() {
-        MimeMessage mMessage = javaMailSender.createMimeMessage();//创建邮件对象
-        MimeMessageHelper mMessageHelper;
-        List<SysUser> sysUsers = userService.queryAllUser();
-        Properties prop = new Properties();
-        mMessageHelper = new MimeMessageHelper(mMessage, true);
-        mMessageHelper.setFrom("2389202940@qq.com");//发件人邮箱
-        sysUsers.forEach(u -> {
-            String email = u.getEmail();
-            if (email == null) {
-                return;
-            }
-            try {
-                mMessageHelper.setTo(email);//收件人邮箱
-                mMessageHelper.setSubject("会员卡即将到期提醒");//邮件的主题
-                mMessageHelper.setText("会员卡即将到期提醒----------");
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
-            }
-            javaMailSender.send(mMessage);//发送邮件
-        });
-
+        ScheduleConfig.createMail(javaMailSender, userService);
         return new AxiosResult<>(0, "邮件发送成功", null);
     }
 

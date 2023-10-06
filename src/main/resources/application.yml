@@ -16,9 +16,9 @@ spring:
       port: 9801
       password: iot
   mail:
-    username: 2389202940@qq.com
-    host: smtp.qq.com
-    password: emmjfjwgmfdyebjf
+    username: 19890534663@163.com
+    host: smtp.163.com
+    password: DQHLTODMOKAGTXMO
 #mybatis 相关配置
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml

@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Date;
 
 public class JwtUtils {
-    private static final String secret = "summerday";
+    private static final String secret = "summer";
 
     /**
      * 生成JWT token
