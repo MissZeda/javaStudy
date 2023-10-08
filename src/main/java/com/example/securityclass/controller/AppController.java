@@ -9,18 +9,12 @@ import com.example.securityclass.entity.Device;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.task.AsyncTask;
 import com.example.securityclass.vo.UserVO;
-import com.google.code.kaptcha.Producer;
 import jakarta.annotation.Resource;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +29,6 @@ public class AppController {
     @Resource
     private UserService userService;
 
-    @Resource
-    private Producer producer;
 
     @Value("${spring.mail.username}")
     private String sendName;
@@ -44,19 +36,6 @@ public class AppController {
     @Resource
     private JavaMailSender javaMailSender;
 
-    @SneakyThrows
-    @GetMapping("/captcha.jpg")
-    public void getCaptcha(HttpServletRequest request, HttpServletResponse response) {
-        response.setContentType("image/jpeg");
-        String capText = producer.createText();
-        System.out.println("验证码:{}" + capText);
-        request.getSession().setAttribute("captcha", capText);
-        BufferedImage image = producer.createImage(capText);
-        ServletOutputStream out = response.getOutputStream();
-
-        ImageIO.write(image, "jpg", out);
-        out.flush();
-    }
 
     @PostMapping("/register")
     public AxiosResult<Map<String, Object>> register(@RequestBody String userInfo) {
