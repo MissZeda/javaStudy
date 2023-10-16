@@ -21,6 +21,7 @@ import java.io.IOException;
  */
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
+
     // 默认登录路径，可以改
     private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login",
             "POST");
@@ -38,7 +39,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // 给需要认证的用户填入信息，把pwd和username放进去
         UsernamePasswordAuthenticationToken authRequest = UsernamePasswordAuthenticationToken.unauthenticated(sysUser.getUserName(),
                 sysUser.getPassword());
-
         setDetails(request, authRequest);
         // 进行下一步认证管理
         return this.getAuthenticationManager().authenticate(authRequest);

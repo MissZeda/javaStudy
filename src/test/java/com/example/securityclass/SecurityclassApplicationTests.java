@@ -40,7 +40,8 @@ class SecurityclassApplicationTests {
 
     @Test
     void redisTest() {
-        redisTemplate.opsForValue().set("name1", "123");
-        System.out.println(redisTemplate.opsForValue().get("name1"));
+        System.out.println("testService = " + testService);
+        redisTemplate.opsForValue().set("login:user:token2323", "123");
+        System.out.println(redisTemplate.opsForValue().get("login:user:token2323"));
     }
 }

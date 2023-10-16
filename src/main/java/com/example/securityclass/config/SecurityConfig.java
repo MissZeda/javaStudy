@@ -36,8 +36,6 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizationHttpRequests -> {
             authorizationHttpRequests
                     .requestMatchers("/app/api/**").permitAll()
-                    .requestMatchers("/login").permitAll()
-                    //.requestMatchers("/app/api/register").permitAll()
                     .anyRequest().access(authorizationManager);
         });
 
@@ -73,10 +71,8 @@ public class SecurityConfig {
         loginFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler());
         // 设置失败处理
         loginFilter.setAuthenticationFailureHandler(new LoginFailureHandler());
-        // 验证码处理
         return loginFilter;
     }
-
     // 配置密码编码器，这里使用的是BCryptPasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {
