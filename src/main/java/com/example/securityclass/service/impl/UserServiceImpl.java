@@ -22,7 +22,6 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-
     @Resource
     private UserMapper userMapper;
 
