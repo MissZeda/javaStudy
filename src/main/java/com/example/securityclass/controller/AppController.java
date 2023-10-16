@@ -6,6 +6,8 @@ import com.alibaba.fastjson2.JSONObject;
 import com.example.securityclass.config.ScheduleConfig;
 import com.example.securityclass.entity.AxiosResult;
 import com.example.securityclass.entity.Device;
+import com.example.securityclass.entity.SysUser;
+import com.example.securityclass.resolver.CurrentUser;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.task.AsyncTask;
 import com.example.securityclass.vo.UserVO;
@@ -109,7 +111,8 @@ public class AppController {
 
 
     @GetMapping("/hello")
-    public String hello() {
+    public String hello(@CurrentUser SysUser user) {
+        System.out.println("user = " + user);
         return "hello";
     }
 

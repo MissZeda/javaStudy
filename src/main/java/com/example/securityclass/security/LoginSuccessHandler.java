@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 登录成功处理器
+ * 登录成功处理器，返回token给前端，并且将token存入redis
  */
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {

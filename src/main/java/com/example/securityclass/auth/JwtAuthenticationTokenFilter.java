@@ -9,6 +9,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * 这是一个JWT过滤器，每次请求时候都会走这一个过滤器，解析JWT
+ */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 

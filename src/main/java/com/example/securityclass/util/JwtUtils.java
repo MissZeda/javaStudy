@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -49,5 +50,13 @@ public class JwtUtils {
 
         JwtAuthentication jwtAuthentication = JSON.parseObject(json, JwtAuthentication.class);
         SecurityContextHolder.getContext().setAuthentication(jwtAuthentication);
+    }
+
+    /**
+     * 解析token并返回解析后的字符串
+     */
+    public static String parseToken(String token) {
+        DecodedJWT decodedJWT = JWT.decode(token);
+        return decodedJWT.getAudience().get(0);
     }
 }
