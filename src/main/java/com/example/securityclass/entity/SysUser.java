@@ -1,5 +1,6 @@
 package com.example.securityclass.entity;
 
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @author makejava
  * @since 2023-09-08 12:51:10
  */
+@ToString
 public class SysUser implements Serializable, UserDetails {
 
     private static final long serialVersionUID = -17407838062243362L;

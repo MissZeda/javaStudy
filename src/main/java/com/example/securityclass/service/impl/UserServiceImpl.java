@@ -1,10 +1,12 @@
 package com.example.securityclass.service.impl;
 
+import com.example.securityclass.dto.UserDto;
 import com.example.securityclass.entity.SysUser;
 import com.example.securityclass.mapper.UserMapper;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.vo.UserVO;
 import jakarta.annotation.Resource;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
+
     @Override
     public List<String> queryAuthoritiesByUserId(int id) {
         return userMapper.queryAuthoritiesByUserId(id);
@@ -36,15 +41,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(String username, String password) {
+    public boolean register(UserDto userDto) {
+        // 存储的验证码
+        String mailCode = redisTemplate.opsForValue().get("mail:" + userDto.getEmail());
+        System.out.println("mailCode = " + mailCode);
+        if (mailCode == null) {
+            throw new RuntimeException("输入的验证码有误或邮箱不匹配");
+        }
+        if (!mailCode.equals(userDto.getCode())) {
+            throw new RuntimeException("验证码有误！");
+        }
         String encodingID = "bcrypt";
         Map<String, PasswordEncoder> passwordEncoderMap = new HashMap<>();
         passwordEncoderMap.put(encodingID, new BCryptPasswordEncoder());
         PasswordEncoder passwordEncoder = new DelegatingPasswordEncoder(encodingID, passwordEncoderMap);
         SysUser sysUser = new SysUser();
-        sysUser.setUserName(username);
-        sysUser.setPassword(passwordEncoder.encode(password));
+        sysUser.setUserName(userDto.getUserName());
+        sysUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         sysUser.setStatus(0);
+        sysUser.setEmail(userDto.getEmail());
+        sysUser.setSex(userDto.getSex());
+        sysUser.setPhonenumber(userDto.getPhonenumber());
         return userMapper.register(sysUser);
     }
 

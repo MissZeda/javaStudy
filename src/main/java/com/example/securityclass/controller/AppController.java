@@ -1,28 +1,20 @@
 package com.example.securityclass.controller;
 
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.example.securityclass.config.ScheduleConfig;
+import com.example.securityclass.dto.UserDto;
 import com.example.securityclass.entity.AxiosResult;
-import com.example.securityclass.entity.Device;
-import com.example.securityclass.entity.SysUser;
-import com.example.securityclass.resolver.CurrentUser;
 import com.example.securityclass.service.UserService;
-import com.example.securityclass.task.AsyncTask;
+import com.example.securityclass.util.MailUtils;
 import com.example.securityclass.vo.UserVO;
 import jakarta.annotation.Resource;
-import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
+import jakarta.mail.MessagingException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/app/api")
@@ -31,20 +23,20 @@ public class AppController {
     @Resource
     private UserService userService;
 
-
-    @Value("${spring.mail.username}")
-    private String sendName;
+    @Resource
+    private MailUtils mailUtils;
 
     @Resource
-    private JavaMailSender javaMailSender;
+    private RedisTemplate<String, String> redisTemplate;
 
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello,这是一个公开的测试接口";
+    }
 
     @PostMapping("/register")
-    public AxiosResult<Map<String, Object>> register(@RequestBody String userInfo) {
-        JSONObject jsonObject = JSON.parseObject(userInfo);
-        String username = jsonObject.getString("userName");
-        String password = jsonObject.getString("password");
-        if (userService.register(username, password)) {
+    public AxiosResult<Map<String, Object>> register(@RequestBody UserDto user) {
+        if (userService.register(user)) {
             return new AxiosResult<>(200, null, "注册成功");
         }
         return new AxiosResult<>(200, null, "注册失败");
@@ -66,55 +58,12 @@ public class AppController {
         return new AxiosResult<>(200, map, "查询成功");
     }
 
-
-    @SneakyThrows
-    @RequestMapping("send")
-    public AxiosResult<String> sendMail03() {
-        ScheduleConfig.createMail(javaMailSender, userService);
-        return new AxiosResult<>(0, "邮件发送成功", null);
+    @GetMapping("/code/{email}")
+    public AxiosResult<Map<String, Integer>> getEmailCode(@PathVariable String email) throws MessagingException {
+        int randomNumber = mailUtils.sendEmailCode(email);
+        redisTemplate.opsForValue().set("mail:" + email, String.valueOf(randomNumber));
+        redisTemplate.expire("mail:" + email, 180, TimeUnit.SECONDS);
+        // 验证码写入redis
+        return new AxiosResult<>(200, "短信发送成功");
     }
-
-    @Resource
-    private AsyncTask asyncTask;
-
-    @RequestMapping("/asyncfuture")
-    public AxiosResult<String> asyncfuture() throws InterruptedException {
-        long begin = System.currentTimeMillis();
-        Future<String> task4 = asyncTask.task4();
-        Future<String> task5 = asyncTask.task5();
-        Future<String> task6 = asyncTask.task6();
-        for (; ; ) {
-            if (task4.isDone() && task5.isDone() && task6.isDone()) {
-                break;
-            }
-        }
-        long end = System.currentTimeMillis();
-        long total = end - begin;
-        System.out.println("总的执行时间=" + total);
-        return new AxiosResult<>(0, "总的执行时间=" + total, null);
-    }
-
-    @RequestMapping("/futureDevice")
-    public AxiosResult<List<Device>> futureDevice() throws InterruptedException, ExecutionException {
-        long begin = System.currentTimeMillis();
-        CompletableFuture<AxiosResult<List<Device>>> task7 = asyncTask.task7();
-        for (; ; ) {
-            if (task7.isDone()) {
-                break;
-            }
-        }
-        long end = System.currentTimeMillis();
-        long total = end - begin;
-        System.out.println("总的执行时间=" + total);
-        return task7.get();
-    }
-
-
-    @GetMapping("/hello")
-    public String hello(@CurrentUser SysUser user) {
-        System.out.println("user = " + user);
-        return "hello";
-    }
-
-
 }
