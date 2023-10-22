@@ -47,7 +47,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private SysUser obtainUser(HttpServletRequest request) throws IOException {
         // 获取前端传递过来的用户名和密码然后进行校验，这里因为前端发送过来的是Json字符串，所以需要request获取reader流得到数据
         // 然后将json字符串转换为Bean对象。之后返回给Security校验即可
-        String line = null;
+        String line;
         // 从请求体获取到数据
         BufferedReader reader = request.getReader();
         StringBuilder stringBuilder = new StringBuilder();

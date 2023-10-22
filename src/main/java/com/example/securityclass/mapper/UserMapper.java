@@ -1,7 +1,8 @@
 package com.example.securityclass.mapper;
 
+import com.example.securityclass.entity.SysPage;
 import com.example.securityclass.entity.SysUser;
-import com.example.securityclass.vo.UserVO;
+import com.example.securityclass.vo.UserMenuVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -15,12 +16,16 @@ public interface UserMapper {
 
     List<String> queryAuthoritiesByUserId(int id);
 
-    List<UserVO> queryUserRolesByUserId(int id);
+    List<UserMenuVO> queryUserMenu(int id);
 
-    boolean register(SysUser sysUser);
+    int register(SysUser sysUser);
 
     List<String> queryPermissionByUrl(@Param("url") String requestURI);
 
     List<SysUser> queryAllUser();
+
+    List<SysPage> queryUserPageByUserId(int id);
+
+    boolean addNewUsersRole(int userId);
 
 }

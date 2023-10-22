@@ -4,7 +4,7 @@ import com.example.securityclass.entity.SysMenu;
 import com.example.securityclass.service.TestService;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.util.JwtUtils;
-import com.example.securityclass.vo.UserVO;
+import com.example.securityclass.vo.UserMenuVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 class SecurityclassApplicationTests {
@@ -32,8 +33,8 @@ class SecurityclassApplicationTests {
 
     @Test
     void testUser() {
-        List<UserVO> userVOS = userService.queryUserRolesByUserId(1);
-        System.out.println("userVOS = " + userVOS);
+        List<UserMenuVO> userMenuVOS = userService.queryUserRolesByUserId(1);
+        System.out.println("userVOS = " + userMenuVOS);
     }
 
 
@@ -63,4 +64,20 @@ class SecurityclassApplicationTests {
         int randomNumber = secureRandom.nextInt(max - min + 1) + min;
         System.out.println("生成的随机数为: " + randomNumber);
     }
+
+
+    @Test
+    void test() {
+        int numSamples = 100000;
+        double mean = 50.0; // 均值
+        double stdDeviation = 10.0; // 标准差
+
+        Random random = new Random();
+        for (int i = 0; i < numSamples; i++) {
+            double randomValue = random.nextGaussian() * stdDeviation + mean;
+            // 这里将随机数randomValue用于你的进一步处理或分析
+            System.out.println(randomValue);
+        }
+    }
+
 }

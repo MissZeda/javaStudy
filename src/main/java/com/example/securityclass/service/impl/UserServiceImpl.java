@@ -1,10 +1,11 @@
 package com.example.securityclass.service.impl;
 
 import com.example.securityclass.dto.UserDto;
+import com.example.securityclass.entity.SysPage;
 import com.example.securityclass.entity.SysUser;
 import com.example.securityclass.mapper.UserMapper;
 import com.example.securityclass.service.UserService;
-import com.example.securityclass.vo.UserVO;
+import com.example.securityclass.vo.UserMenuVO;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,8 +37,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserVO> queryUserRolesByUserId(int id) {
-        return userMapper.queryUserRolesByUserId(id);
+    public List<UserMenuVO> queryUserMenu(int id) {
+        return userMapper.queryUserMenu(id);
     }
 
     @Override
@@ -62,7 +63,11 @@ public class UserServiceImpl implements UserService {
         sysUser.setEmail(userDto.getEmail());
         sysUser.setSex(userDto.getSex());
         sysUser.setPhonenumber(userDto.getPhonenumber());
-        return userMapper.register(sysUser);
+        int id = userMapper.register(sysUser);
+        if (id >= 1) {
+            return addNewUsersRole(sysUser.getId());
+        }
+        return false;
     }
 
     @Override
@@ -73,6 +78,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<SysUser> queryAllUser() {
         return userMapper.queryAllUser();
+    }
+
+    @Override
+    public List<SysPage> queryUserPageByUserId(int id) {
+        return userMapper.queryUserPageByUserId(id);
+    }
+
+    @Override
+    public boolean addNewUsersRole(int userId) {
+        return userMapper.addNewUsersRole(userId);
     }
 
     // 登录

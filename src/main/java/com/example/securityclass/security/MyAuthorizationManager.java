@@ -37,7 +37,6 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext requestAuthorizationContext) {
         // 我们可以获取原始request对象
         HttpServletRequest request = requestAuthorizationContext.getRequest();
-
         // 访问的URL
         String requestURI = request.getRequestURI();
 
@@ -46,8 +45,9 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
 
         // 根据这些信息 和业务写逻辑即可 最终决定是否授权 isGranted
         boolean isGranted = true;
+        System.out.println(requestURI);
         // 请求路径为login和register直接放行
-        if (requestURI.equals("/login") || requestURI.equals("/app/api/register")) {
+        if (requestURI.equals("/login")) {
             return new AuthorizationDecision(true);
         }
         // 获取到当前用户所具备的权限

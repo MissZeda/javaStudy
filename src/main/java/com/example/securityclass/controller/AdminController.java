@@ -1,27 +1,15 @@
 package com.example.securityclass.controller;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * admin用户才可以访问的接口
+ */
 @RestController
 @RequestMapping("/admin/api")
 public class AdminController {
 
-    @GetMapping("/hello")
-    public String hello(String username) {
-        return "hello，admin";
-    }
 
-    @GetMapping("/test")
-    public String test(String username) {
-        return "hello，admin,test";
-    }
-
-
-    @GetMapping("/device")
-    public String device() {
-        return "hello，admin,device";
-    }
 }
