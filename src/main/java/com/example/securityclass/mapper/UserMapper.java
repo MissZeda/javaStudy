@@ -28,4 +28,5 @@ public interface UserMapper {
 
     boolean addNewUsersRole(int userId);
 
+
 }

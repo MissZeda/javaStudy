@@ -1,5 +1,9 @@
 package com.example.securityclass.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
@@ -8,33 +12,21 @@ import java.io.Serializable;
  * @author makejava
  * @since 2023-09-08 12:51:10
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SysRoleMenu implements Serializable {
     private static final long serialVersionUID = 965479037604186489L;
     /**
      * 角色ID
      */
-    private Long roleId;
+    private Integer roleId;
     /**
      * 菜单id
      */
-    private Long menuId;
+    private Integer menuId;
 
 
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public Long getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
-    }
 
 }
 

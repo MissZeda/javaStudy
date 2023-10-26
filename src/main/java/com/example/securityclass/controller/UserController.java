@@ -42,7 +42,7 @@ public class UserController {
     }
 
     /**
-     * 按用户 ID 查询用户的菜单和权限
+     * 按用户 ID 查询用户的接口和权限
      *
      * @param id 编号
      * @return {@link AxiosResult}<{@link Map}<{@link String}, {@link Object}>>

@@ -1,10 +1,10 @@
 package com.example.securityclass;
 
 import com.example.securityclass.entity.SysMenu;
+import com.example.securityclass.service.SystemService;
 import com.example.securityclass.service.TestService;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.util.JwtUtils;
-import com.example.securityclass.vo.UserMenuVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,11 +31,7 @@ class SecurityclassApplicationTests {
         System.out.println("menuList = " + menuList);
     }
 
-    @Test
-    void testUser() {
-        List<UserMenuVO> userMenuVOS = userService.queryUserRolesByUserId(1);
-        System.out.println("userVOS = " + userMenuVOS);
-    }
+
 
 
     @Resource
@@ -78,6 +74,22 @@ class SecurityclassApplicationTests {
             // 这里将随机数randomValue用于你的进一步处理或分析
             System.out.println(randomValue);
         }
+    }
+
+    @Resource
+    private SystemService systemService;
+
+    @Test
+    void authorityTest() {
+
+        long startTime = System.currentTimeMillis();
+
+        boolean b = systemService.distributeInterfaceAuthority();
+
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+
+        System.out.println("Method execution time: " + executionTime + " milliseconds");
     }
 
 }

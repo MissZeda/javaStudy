@@ -90,6 +90,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.addNewUsersRole(userId);
     }
 
+
     // 登录
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

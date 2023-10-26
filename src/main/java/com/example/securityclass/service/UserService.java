@@ -26,4 +26,6 @@ public interface UserService extends UserDetailsService {
     List<SysPage> queryUserPageByUserId(int id);
 
     boolean addNewUsersRole(int userId);
+
+
 }
