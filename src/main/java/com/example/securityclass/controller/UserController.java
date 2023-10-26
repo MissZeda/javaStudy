@@ -9,8 +9,8 @@ import com.example.securityclass.service.UserService;
 import com.example.securityclass.vo.UserMenuVO;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -33,8 +33,8 @@ public class UserController {
      * @param id 编号
      * @return {@link AxiosResult}<{@link Map}<{@link String}, {@link List<String>}>>
      */
-    @GetMapping("/queryAuthoritiesByUserId/{id}")
-    public AxiosResult<Map<String, List<String>>> queryAuthorities(@PathVariable String id) {
+    @GetMapping("/queryAuthoritiesByUserId")
+    public AxiosResult<Map<String, List<String>>> queryAuthorities(@RequestParam("id") String id) {
         List<String> authorities = userService.queryAuthoritiesByUserId(Integer.parseInt(id));
         Map<String, List<String>> map = new HashMap<>();
         map.put("authorities", authorities);
@@ -47,8 +47,8 @@ public class UserController {
      * @param id 编号
      * @return {@link AxiosResult}<{@link Map}<{@link String}, {@link Object}>>
      */
-    @GetMapping("/queryUserMenu/{id}")
-    public AxiosResult<Map<String, Object>> queryUserMenu(@PathVariable String id) {
+    @GetMapping("/queryUserMenu")
+    public AxiosResult<Map<String, Object>> queryUserMenu(@RequestParam("id") String id) {
         List<UserMenuVO> roles = userService.queryUserMenu(Integer.parseInt(id));
         Map<String, Object> map = new HashMap<>();
         map.put("roles", roles);

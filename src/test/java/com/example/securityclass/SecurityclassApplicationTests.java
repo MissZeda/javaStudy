@@ -1,10 +1,10 @@
 package com.example.securityclass;
 
-import com.example.securityclass.entity.SysMenu;
 import com.example.securityclass.service.SystemService;
 import com.example.securityclass.service.TestService;
 import com.example.securityclass.service.UserService;
 import com.example.securityclass.util.JwtUtils;
+import com.example.securityclass.vo.UserMenuVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,9 +26,8 @@ class SecurityclassApplicationTests {
 
     @Test
     void contextLoads() {
-        List<SysMenu> menuList = testService.getMenuList();
-
-        System.out.println("menuList = " + menuList);
+        List<UserMenuVO> userMenuVOS = userService.queryUserMenu(4);
+        System.out.println("userMenuVOS = " + userMenuVOS);
     }
 
 

@@ -31,7 +31,7 @@ public class AdminController {
     public AxiosResult<Map<String, Object>> getAllUserList(
             @RequestParam(value = "pageNum", required = false) String pageNum,
             @RequestParam(value = "pageSize", required = false) String pageSize) {
-
+        System.out.println("pageNum = " + pageNum);
         if (pageNum != null && pageSize != null) {
             PageHelper.startPage(Integer.parseInt(pageNum), Integer.parseInt(pageSize));
             List<SysUser> sysUsers = userService.queryAllUser();
@@ -56,8 +56,8 @@ public class AdminController {
         return new AxiosResult<>(50001, "添加失败");
     }
 
-    @DeleteMapping("/system/delete/{id}")
-    public AxiosResult<Map<String, String>> deleteInterface(@PathVariable String id) {
+    @DeleteMapping("/system/delete")
+    public AxiosResult<Map<String, String>> deleteInterface(@RequestParam("id") String id) {
         if (systemService.deleteInterface(id)) {
             return new AxiosResult<>(200, "删除成功");
         }
