@@ -42,11 +42,18 @@ public class SystemServiceImpl implements SystemService {
                 .filter(systemInterface -> menus.stream()
                         .noneMatch(menu -> menu.getMenuId().equals(systemInterface.getId())))
                 .toList();
+        if (awaitAddInterface.size() == 0) {
+            return false;
+        }
         List<SysMenu> adminAPI = awaitAddInterface.stream().filter(e -> e.getPath().startsWith("/admin/api")).toList();
         List<SysMenu> userAPI = awaitAddInterface.stream().filter(e -> e.getPath().startsWith("/user/api")).toList();
         try {
-            systemMapper.distributeAuthority(adminAPI);
-            systemMapper.distributeAuthority(userAPI);
+            if (adminAPI.size() != 0) {
+                systemMapper.distributeAuthority(adminAPI);
+            }
+            if (userAPI.size() != 0) {
+                systemMapper.distributeAuthority(userAPI);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,7 @@
 package com.example.securityclass.entity;
 
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,8 +11,11 @@ import java.util.Date;
  * @author makejava
  * @since 2023-09-08 12:51:10
  */
+@lombok.Data
 public class Data implements Serializable {
+    @Serial
     private static final long serialVersionUID = 976825661961654730L;
+
 
     private Integer id;
 

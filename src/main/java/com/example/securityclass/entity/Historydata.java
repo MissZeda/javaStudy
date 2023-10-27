@@ -1,5 +1,6 @@
 package com.example.securityclass.entity;
 
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,6 +10,7 @@ import java.util.Date;
  * @author makejava
  * @since 2023-09-08 12:51:10
  */
+
 public class Historydata implements Serializable {
     private static final long serialVersionUID = 326543652316308932L;
 

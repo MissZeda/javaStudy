@@ -30,9 +30,6 @@ class SecurityclassApplicationTests {
         System.out.println("userMenuVOS = " + userMenuVOS);
     }
 
-
-
-
     @Resource
     private RedisTemplate<String, String> redisTemplate;
 
@@ -80,15 +77,17 @@ class SecurityclassApplicationTests {
 
     @Test
     void authorityTest() {
-
-        long startTime = System.currentTimeMillis();
-
-        boolean b = systemService.distributeInterfaceAuthority();
-
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
-
-        System.out.println("Method execution time: " + executionTime + " milliseconds");
+        systemService.distributeInterfaceAuthority();
     }
+
+
+    /*@Resource
+    private HistoryDataMapper historyDataMapper;
+
+    @Test
+    public void MybatisPlusTest(){
+        Historydata historydata = historyDataMapper.selectById(1);
+        System.out.println("historydata = " + historydata);
+    }*/
 
 }
