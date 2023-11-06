@@ -21,13 +21,21 @@ spring:
     password: DQHLTODMOKAGTXMO
 #mybatis 相关配置
 mybatis:
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.securityclass.entity
   configuration:
     map-underscore-to-camel-case: true
 
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.securityclass.entity
 
 
 logging:
   level:
     org.mybatis: DEBUG
+
+
+upload:
+  #directory: /home/ubuntu/web/upload
+  directory: d:/upload/

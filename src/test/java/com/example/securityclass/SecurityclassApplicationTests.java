@@ -1,5 +1,7 @@
 package com.example.securityclass;
 
+import com.example.securityclass.entity.Historydata;
+import com.example.securityclass.mapper.HistoryDataMapper;
 import com.example.securityclass.service.SystemService;
 import com.example.securityclass.service.TestService;
 import com.example.securityclass.service.UserService;
@@ -81,13 +83,13 @@ class SecurityclassApplicationTests {
     }
 
 
-    /*@Resource
+    @Resource
     private HistoryDataMapper historyDataMapper;
 
     @Test
-    public void MybatisPlusTest(){
-        Historydata historydata = historyDataMapper.selectById(1);
+    void mybatisPlusTest() {
+        Historydata historydata = historyDataMapper.selectById(2);
         System.out.println("historydata = " + historydata);
-    }*/
+    }
 
 }

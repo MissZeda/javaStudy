@@ -4,11 +4,14 @@ package com.example.securityclass.controller;
 import com.example.securityclass.dto.UserDto;
 import com.example.securityclass.entity.AxiosResult;
 import com.example.securityclass.service.UserService;
+import com.example.securityclass.util.FileUploadUtils;
 import com.example.securityclass.util.MailUtils;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -64,5 +67,25 @@ public class AppController {
         return new AxiosResult<>(200, "短信发送成功");
     }
 
+    /**
+     * 用户上传头像
+     *
+     * @param file
+     * @param id 用户id
+     * @return
+     */
+
+    @Value("${upload.directory}")
+    private String uploadDirectory;
+
+
+    @PostMapping("/file/upload")
+    public AxiosResult<Map<String, Object>> upload(@RequestPart("file") MultipartFile file) {
+        String filePath = FileUploadUtils.uploadFile(file, uploadDirectory);
+        if (filePath != null) {
+            return new AxiosResult<>(200, "文件上传成功");
+        }
+        throw new RuntimeException("文件上传失败");
+    }
 
 }

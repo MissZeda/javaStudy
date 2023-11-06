@@ -1,6 +1,12 @@
 package com.example.securityclass.entity;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,9 +17,13 @@ import java.util.Date;
  * @since 2023-09-08 12:51:10
  */
 
+@TableName("historydata")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Historydata implements Serializable {
     private static final long serialVersionUID = 326543652316308932L;
 
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private String name;
